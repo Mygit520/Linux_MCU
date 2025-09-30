@@ -4,58 +4,52 @@ led_on.elf:     file format elf32-littlearm
 
 Disassembly of section .text:
 
-08000000 <_start>:
- 8000000:	4918      	ldr	r1, [pc, #96]	; (8000064 <delay_loop+0x8>)
- 8000002:	2001      	movs	r0, #1
- 8000004:	6008      	str	r0, [r1, #0]
- 8000006:	4918      	ldr	r1, [pc, #96]	; (8000068 <delay_loop+0xc>)
- 8000008:	2001      	movs	r0, #1
- 800000a:	6008      	str	r0, [r1, #0]
- 800000c:	f000 f824 	bl	8000058 <delay>
- 8000010:	4915      	ldr	r1, [pc, #84]	; (8000068 <delay_loop+0xc>)
- 8000012:	2000      	movs	r0, #0
- 8000014:	6008      	str	r0, [r1, #0]
- 8000016:	f000 f81f 	bl	8000058 <delay>
- 800001a:	4913      	ldr	r1, [pc, #76]	; (8000068 <delay_loop+0xc>)
- 800001c:	2001      	movs	r0, #1
- 800001e:	6008      	str	r0, [r1, #0]
- 8000020:	f000 f81a 	bl	8000058 <delay>
- 8000024:	4910      	ldr	r1, [pc, #64]	; (8000068 <delay_loop+0xc>)
- 8000026:	2000      	movs	r0, #0
- 8000028:	6008      	str	r0, [r1, #0]
- 800002a:	f000 f815 	bl	8000058 <delay>
- 800002e:	490e      	ldr	r1, [pc, #56]	; (8000068 <delay_loop+0xc>)
- 8000030:	2001      	movs	r0, #1
- 8000032:	6008      	str	r0, [r1, #0]
- 8000034:	f000 f810 	bl	8000058 <delay>
- 8000038:	490b      	ldr	r1, [pc, #44]	; (8000068 <delay_loop+0xc>)
- 800003a:	2000      	movs	r0, #0
- 800003c:	6008      	str	r0, [r1, #0]
- 800003e:	f000 f80b 	bl	8000058 <delay>
- 8000042:	4909      	ldr	r1, [pc, #36]	; (8000068 <delay_loop+0xc>)
- 8000044:	2001      	movs	r0, #1
- 8000046:	6008      	str	r0, [r1, #0]
- 8000048:	f000 f806 	bl	8000058 <delay>
- 800004c:	4906      	ldr	r1, [pc, #24]	; (8000068 <delay_loop+0xc>)
- 800004e:	2000      	movs	r0, #0
- 8000050:	6008      	str	r0, [r1, #0]
- 8000052:	f000 f801 	bl	8000058 <delay>
+08000000 <_stack+0x7f80000>:
+ 8000000:	20000c00 	andcs	r0, r0, r0, lsl #24
+ 8000004:	08000009 	stmdaeq	r0, {r0, r3}
 
-08000056 <halt>:
- 8000056:	e7fe      	b.n	8000056 <halt>
+08000008 <_start>:
+ 8000008:	f000 f800 	bl	800000c <led_loop>
 
-08000058 <delay>:
- 8000058:	4a04      	ldr	r2, [pc, #16]	; (800006c <delay_loop+0x10>)
- 800005a:	2300      	movs	r3, #0
+0800000c <led_loop>:
+ 800000c:	4910      	ldr	r1, [pc, #64]	; (8000050 <delay_loop+0x6>)
+ 800000e:	2001      	movs	r0, #1
+ 8000010:	6008      	str	r0, [r1, #0]
+ 8000012:	4910      	ldr	r1, [pc, #64]	; (8000054 <delay_loop+0xa>)
+ 8000014:	2001      	movs	r0, #1
+ 8000016:	6008      	str	r0, [r1, #0]
+ 8000018:	f000 f816 	bl	8000048 <delay>
+ 800001c:	490d      	ldr	r1, [pc, #52]	; (8000054 <delay_loop+0xa>)
+ 800001e:	2000      	movs	r0, #0
+ 8000020:	6008      	str	r0, [r1, #0]
+ 8000022:	f000 f811 	bl	8000048 <delay>
+ 8000026:	490b      	ldr	r1, [pc, #44]	; (8000054 <delay_loop+0xa>)
+ 8000028:	2001      	movs	r0, #1
+ 800002a:	6008      	str	r0, [r1, #0]
+ 800002c:	f000 f80c 	bl	8000048 <delay>
+ 8000030:	4908      	ldr	r1, [pc, #32]	; (8000054 <delay_loop+0xa>)
+ 8000032:	2000      	movs	r0, #0
+ 8000034:	6008      	str	r0, [r1, #0]
+ 8000036:	f000 f807 	bl	8000048 <delay>
+ 800003a:	4906      	ldr	r1, [pc, #24]	; (8000054 <delay_loop+0xa>)
+ 800003c:	2001      	movs	r0, #1
+ 800003e:	6008      	str	r0, [r1, #0]
+ 8000040:	f000 f802 	bl	8000048 <delay>
+ 8000044:	e7e2      	b.n	800000c <led_loop>
 
-0800005c <delay_loop>:
- 800005c:	3a01      	subs	r2, #1
- 800005e:	429a      	cmp	r2, r3
- 8000060:	d1fc      	bne.n	800005c <delay_loop>
- 8000062:	46f7      	mov	pc, lr
- 8000064:	50000000 	andpl	r0, r0, r0
- 8000068:	50000014 	andpl	r0, r0, r4, lsl r0
- 800006c:	00002710 	andeq	r2, r0, r0, lsl r7
+08000046 <halt>:
+ 8000046:	e7fe      	b.n	8000046 <halt>
+
+08000048 <delay>:
+ 8000048:	4a03      	ldr	r2, [pc, #12]	; (8000058 <delay_loop+0xe>)
+
+0800004a <delay_loop>:
+ 800004a:	3a01      	subs	r2, #1
+ 800004c:	d1fd      	bne.n	800004a <delay_loop>
+ 800004e:	4770      	bx	lr
+ 8000050:	50000000 	andpl	r0, r0, r0
+ 8000054:	50000014 	andpl	r0, r0, r4, lsl r0
+ 8000058:	000f4240 	andeq	r4, pc, r0, asr #4
 
 Disassembly of section .ARM.attributes:
 
