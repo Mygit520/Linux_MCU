@@ -6,8 +6,53 @@
 .text
 .global _start
 
-.word 0x2000C000      /* 初始栈指针 */
-.word _start + 1      /* 复位向量（Thumb状态） */
+.word 0x2000C000     
+.word _start + 1     
 
+/* 入口点 */
 _start:
-    b start
+    /* 1. 设置栈指针（硬编码） */
+    ldr sp, =_stack_top   
+    
+    /* 2. 复制.data段 */
+    /* 获取符号地址 */
+    ldr r0, =_sdata      
+    ldr r1, =_edata       /* RAM中.data段结束地址 */
+    ldr r2, =_sidata      /* Flash中.data段初始值地址 */
+    
+    /* 检查.data段是否为空 */
+    cmp r0, r1
+    beq .Ldata_done
+    
+    /* 复制循环 */
+.Ldata_loop:
+    ldr r3, [r2], #4      /* 从Flash加载4字节 */
+    str r3, [r0], #4      /* 存储到RAM */
+    cmp r0, r1            /* 检查是否完成 */
+    blt .Ldata_loop
+    
+.Ldata_done:
+    
+    /* 3. 清零.bss段 */
+    ldr r0, =_sbss        /* .bss段起始地址 */
+    ldr r1, =_ebss        /* .bss段结束地址 */
+    mov r2, #0            /* 清零值 */
+    
+    /* 检查.bss段是否为空 */
+    cmp r0, r1
+    beq .Lbss_done
+    
+    /* 清零循环 */
+.Lbss_loop:
+    str r2, [r0], #4      /* 存储0并递增地址 */
+    cmp r0, r1            /* 检查是否完成 */
+    blt .Lbss_loop
+    
+.Lbss_done:
+    
+    /* 4. 跳转到main函数 */
+    ldr r0, =start
+    bx r0
+    
+    /* 5. 如果main返回，进入死循环 */
+    b .
