@@ -6,10 +6,35 @@
 .text
 .global _start
 
-.word 0x2000C000     
-.word _start + 1     
+/* ==== 中断向量表 ==== */
+.section .isr_vector, "a"
+    .word   _stack_top          /* 栈顶地址 */
+    .word   _start + 1          /* 复位处理程序 */
+    .word   NMI_Handler + 1 /* NMI */
+    .word   HardFault_Handler + 1 /* HardFault */
+    .word   MemManage_Handler + 1 /* MemManage */
+    .word   BusFault_Handler + 1 /* BusFault */
+    .word   UsageFault_Handler + 1 /* UsageFault */
+    .word   0                   /* 保留 */
+    .word   0                   /* 保留 */
+    .word   0                   /* 保留 */
+    .word   0                   /* 保留 */
+    .word   SVC_Handler + 1 /* SVC */
+    .word   DebugMon_Handler + 1 /* DebugMon */
+    .word   0                   /* 保留 */
+    .word   PendSV_Handler + 1 /* PendSV */
+    .word   SysTick_Handler + 1 /* SysTick */
+    /* 其他外设中断可以按需添加 */
+
+/* ==== 默认中断处理程序 ==== */
+.section .text.Default_Handler
+.global Default_Handler
+.thumb_func
+Default_Handler:
+    b Default_Handler   /* 死循环 */   
 
 /* 入口点 */
+.section .text
 _start:
     /* 1. 设置栈指针（硬编码） */
     ldr sp, =_stack_top   
@@ -54,5 +79,6 @@ _start:
     ldr r0, =start
     bx r0
     
+    .word 0xffffffff
     /* 5. 如果main返回，进入死循环 */
     b .

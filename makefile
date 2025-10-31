@@ -10,8 +10,7 @@ TARGET = led_on
 
 # 源文件
 AS_SRC = start.S
-C_SRC = main.c
-
+C_SRC = main.c iqr.c
 # 编译选项
 CFLAGS = -mcpu=cortex-m3 -mthumb -Wall -O2
 # 使用 GCC 进行链接而不是直接使用 ld
@@ -37,10 +36,10 @@ $(TARGET).dis: $(TARGET).elf
 
 # 根据是否使用 GCC 进行链接设置不同的链接命令
 ifeq ($(LINK_VIA_GCC), yes)
-$(TARGET).elf: start.o main.o
+$(TARGET).elf: start.o main.o irq.o
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 else
-$(TARGET).elf: start.o main.o
+$(TARGET).elf: start.o main.o irq.o
 	$(LD) $(LDFLAGS) $^ -o $@
 endif
 
@@ -50,6 +49,9 @@ start.o: start.S
 	$(CC) $(CFLAGS) -c $< -o $@
 
 main.o: main.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+irq.o: irq.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # 显示内存使用统计

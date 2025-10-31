@@ -16,7 +16,7 @@
 const char g_a = 'a';
 volatile char g_b = 'b';
 char g_string[] = "hello world\n";
-
+unsigned int g_c;
 // 初始化USART1
 void uart_init(uint32_t baudrate) {
     // 1. 使能GPIOA和USART1时钟
@@ -78,10 +78,10 @@ void start(void)
     g_b = 'x';
     uart_putc(g_b);
 
-    while(1) {
-        // 使用printf输出调试信息（需要syscalls.c支持）
+    // while(1) {
+    //     // 使用printf输出调试信息（需要syscalls.c支持）
         
-        // 延时约1秒
-        delay(50000);
-    }
+    //     // 延时约1秒
+    //     delay(50000);
+    // }
 }
